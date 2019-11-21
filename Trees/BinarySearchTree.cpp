@@ -1,5 +1,6 @@
 #include <iostream> 
 #include <stack> 
+#include <queue> 
 
 using namespace std;
 
@@ -47,6 +48,35 @@ struct node* PreOrderTraversalRecursion(struct node* root)
     cout<<root->data<<",";
     PreOrderTraversalRecursion(root->left);
     PreOrderTraversalRecursion(root->right);
+}
+
+void PrintAtGivenLevel(struct node* root, int level)
+{
+    if (root == NULL)
+        return;
+    if (level == 1)
+    {
+        cout<<root->data<<", ";
+    }
+    else
+    {
+        PrintAtGivenLevel(root->left, level -1);
+        PrintAtGivenLevel(root->right, level -1);
+    }
+}
+
+//Level order traversal method using recursion
+struct node* LevelOrderTraversalRecursion(struct node* root)
+{
+    int count = 0;
+    struct node* temp = root;
+    while (temp != NULL)
+    {
+        temp = temp->right;
+        ++count;
+        PrintAtGivenLevel(root, count);
+        cout<<endl;
+    }
 }
 
 //Inorder traversal iteratively 
@@ -108,6 +138,24 @@ struct node* PostOrderTraversalItrative(struct node* root)
         struct node* n2 = s2.top();
         cout<<n2->data<<",";
         s2.pop();
+    }
+}
+
+struct node* LevelOrderTraversalUsingQueues(struct node* root)
+{
+    queue <struct node*> q1;
+    struct node* temp = root;
+
+    q1.push(temp);
+    while (!q1.empty())
+    {
+        temp = q1.front();
+        cout<<temp->data<<",";
+        q1.pop();
+        if (temp->left)
+            q1.push(temp->left);
+        if (temp->right)
+            q1.push(temp->right);
     }
 }
 
@@ -234,6 +282,10 @@ int main()
     PreOrderTraversalRecursion(root);
     cout<<endl<<"================ Pre Order Traversal using Iteration ==================="<<endl;
     PreOrderTraversalItrative(root);
+    cout<<endl<<"================ Level Order Traversal using Recursion ==================="<<endl;
+    LevelOrderTraversalRecursion(root);
+    cout<<endl<<"================ Level Order Traversal Using Queue ==================="<<endl;
+    LevelOrderTraversalUsingQueues(root);
     cout<<endl<<"========================================================================"<<endl;
     cout<<"Search OutPut"<<endl;
     Search(root, 10);
